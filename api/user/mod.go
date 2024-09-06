@@ -5,7 +5,7 @@ import "qinyu-wf/global"
 type User struct {
 	Username string `json:"username" gorm:"username"`
 	NickName string `json:"nickname" gorm:"nickname"`
-	Password string `json:"password" gorm:"password"`
+	Password string `json:"-" gorm:"password"`
 	Phone    string `json:"phone" gorm:"phone"`
 	Email    string `json:"email" gorm:"email"`
 	BirthDay string `json:"birthDay" gorm:"birthDay"`
@@ -14,12 +14,12 @@ type User struct {
 }
 
 type CreateParams struct {
-	Username string `json:"username" gorm:"username"`
-	Password string `json:"password" gorm:"password"`
+	Username string `json:"username" gorm:"username" binding:"required"`
+	Password string `json:"password" gorm:"password" binding:"required"`
 }
 type LoginParams struct {
-	Username string `json:"username" gorm:"username"`
-	Password string `json:"password" gorm:"password"`
+	Username string `json:"username" gorm:"username" binding:"required"`
+	Password string `json:"password" gorm:"password" binding:"required"`
 }
 
 func (User) TableName() string {

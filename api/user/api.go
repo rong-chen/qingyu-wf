@@ -33,5 +33,30 @@ func CreateApi(c *gin.Context) {
 	c.JSON(200, global.RespMsg(200, "创建成功"))
 }
 func Login(c *gin.Context) {
-
+	var lp LoginParams
+	err := c.BindJSON(&lp)
+	if err != nil {
+		c.JSON(200, global.RespMsg(7, "参数异常"))
+		return
+	}
+	user := SearchDb("username", lp.Username)
+	if user.ID == uuid.Nil {
+		c.JSON(200, global.RespMsg(7, "暂无该用户"))
+		return
+	}
+	if ok := utils.Vaild(lp.Password, user.Password); !ok {
+		c.JSON(200, global.RespMsg(7, "密码错误"))
+		return
+	}
+	strUsr := user.ID.String()
+	jwt, err := utils.GenerateJWT(strUsr)
+	if err != nil {
+		return
+	}
+	c.JSON(200, global.RespMsgData(0, "登陆成功", jwt))
+}
+func GetUserInfo(c *gin.Context) {
+	id, _ := c.Get("id")
+	user := SearchDb("id", id.(string))
+	c.JSON(200, global.RespMsgData(0, "", user))
 }

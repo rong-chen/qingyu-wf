@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"qinyu-wf/api/friendRelationship"
 	"qinyu-wf/api/user"
 	"qinyu-wf/global"
 )
@@ -27,6 +28,7 @@ type MigrateInterface interface {
 
 var migrateList = []interface{}{
 	&user.User{},
+	&friendRelationship.FriendRelationship{},
 }
 
 func Init(config Config) {

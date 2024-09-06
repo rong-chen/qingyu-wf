@@ -2,7 +2,9 @@ package utils
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"qinyu-wf/global"
 	"time"
 )
 
@@ -47,4 +49,19 @@ func ParseJWT(tokenString string) (*Claims, error) {
 	} else {
 		return nil, fmt.Errorf("invalid token")
 	}
+}
+
+func JWTAuthMiddleware(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		c.JSON(200, global.RespMsg(7, "Authorization异常"))
+		c.Abort()
+		return
+	}
+	claims, err := ParseJWT(token)
+	if err != nil {
+		return
+	}
+	c.Set("id", claims.UserID)
+	c.Next()
 }

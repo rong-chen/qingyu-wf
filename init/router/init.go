@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"qinyu-wf/api/friendRelationship"
 	"qinyu-wf/api/user"
 )
 
@@ -12,6 +13,7 @@ type routerInterface interface {
 
 var routerList = []routerInterface{
 	new(user.Router),
+	new(friendRelationship.RelationshipRouter),
 }
 
 func Init() {
