@@ -12,7 +12,7 @@ func main() {
 	// 初始化数据库
 	db.Init(dbConfig)
 	// 初始化表
-	db.InitAutoMigrate()
+	//db.InitAutoMigrate()
 	// 初始化路由
 	router.Init()
 }

@@ -1,13 +1,10 @@
 package global
 
-type RespMsgStruct struct {
-	code uint
-	msg  string
-}
+import "github.com/gin-gonic/gin"
 
-func RespMsg(code uint, msg string) *RespMsgStruct {
-	return &RespMsgStruct{
-		code: code,
-		msg:  msg,
+func RespMsg(code uint, msg string) *gin.H {
+	return &gin.H{
+		"code": code,
+		"msg":  msg,
 	}
 }

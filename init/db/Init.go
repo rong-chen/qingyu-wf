@@ -25,8 +25,8 @@ type MigrateInterface interface {
 	AutoMigrateFunc()
 }
 
-var migrateList = []MigrateInterface{
-	new(user.User),
+var migrateList = []interface{}{
+	&user.User{},
 }
 
 func Init(config Config) {
