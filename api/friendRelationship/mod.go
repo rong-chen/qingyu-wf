@@ -9,9 +9,10 @@ import (
 // FriendRelationship 用户关系表
 type FriendRelationship struct {
 	global.Model
-	UserId   uuid.UUID `json:"userId" gorm:"column:user_id"`
-	FriendId uuid.UUID `json:"friendId" gorm:"column:friend_id"`
-	Status   string    `json:"status" gorm:"column:status"` // 1好友，2情侣，3黑名单
+	UserId     uuid.UUID `json:"userId" gorm:"column:user_id"`
+	FriendId   uuid.UUID `json:"friendId" gorm:"column:friend_id"`
+	Status     string    `json:"status" gorm:"column:status"` // 1好友，2情侣，3黑名单
+	ClassifyId uint      `json:"classifyId" gorm:"column:classify_id"`
 }
 
 // AwaitingAgreeTable 待通过申请好友表
@@ -29,6 +30,12 @@ type RelationshipList struct {
 	FriendInfo user.User `json:"friendInfo"`
 }
 
+type FriendsList struct {
+	FriendId   uuid.UUID `json:"friendId"`
+	FriendInfo user.User `json:"friendInfo"`
+	Status     string    `json:"status"`
+	ClassifyId uint      `json:"classifyId"`
+}
 type CreateParams struct {
 	UserId   uuid.UUID `json:"userId" gorm:"userId" binding:"required"`
 	FriendId uuid.UUID `json:"friendId" gorm:"friendId" binding:"required"`

@@ -59,3 +59,10 @@ func CreateRelationshipList(fr FriendRelationship) (e error) {
 	e = global.MySql.Create(&fr).Error
 	return
 }
+
+// SearchFriendList 查询好友
+func SearchFriendList(userId string) []FriendRelationship {
+	var list []FriendRelationship
+	global.MySql.Where("user_id = ? and status in ?", userId, []string{"1"}).Find(&list)
+	return list
+}

@@ -55,8 +55,18 @@ func Login(c *gin.Context) {
 	}
 	c.JSON(200, global.RespMsgData(0, "登陆成功", jwt))
 }
+
 func GetUserInfo(c *gin.Context) {
 	id, _ := c.Get("id")
 	user := SearchDb("id", id.(string))
+	c.JSON(200, global.RespMsgData(0, "", user))
+}
+
+func GetUserInfoById(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(200, global.RespMsg(7, "参数不正确"))
+	}
+	user := SearchDb("id", id)
 	c.JSON(200, global.RespMsgData(0, "", user))
 }

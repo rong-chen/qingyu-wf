@@ -14,5 +14,6 @@ func (Router) InitRouter(router *gin.Engine) {
 		r.POST("create", CreateApi)
 		r.POST("login", Login)
 		r.GET("info", utils.JWTAuthMiddleware, GetUserInfo)
+		r.GET("info/:id", utils.JWTAuthMiddleware, GetUserInfoById)
 	}
 }

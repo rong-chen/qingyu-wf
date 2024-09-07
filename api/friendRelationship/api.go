@@ -1,8 +1,10 @@
 package friendRelationship
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"qingyu-wf/api/user"
 	"qingyu-wf/global"
 )
 
@@ -10,7 +12,8 @@ func Apply(c *gin.Context) {
 	var cp CreateParams
 	err := c.BindJSON(&cp)
 	if err != nil {
-		c.JSON(200, global.RespMsg(0, "参数错误"))
+		fmt.Println(err)
+		c.JSON(200, global.RespMsg(7, "参数错误"))
 		return
 	}
 	obj := FindAwaitingAgreeTable(cp.UserId, cp.FriendId)
@@ -73,5 +76,16 @@ func AgreeFriend(c *gin.Context) {
 }
 
 func FriendList(c *gin.Context) {
-
+	id, _ := c.Get("id")
+	list := SearchFriendList(id.(string))
+	var frl []FriendsList
+	for i := range list {
+		frl = append(frl, FriendsList{
+			FriendId:   list[i].FriendId,
+			FriendInfo: user.SearchDb("id", list[i].FriendId.String()),
+			Status:     list[i].Status,
+			ClassifyId: list[i].ClassifyId,
+		})
+	}
+	c.JSON(200, global.RespMsgData(0, "", frl))
 }
