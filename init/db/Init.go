@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"qingyu-wf/api/chat"
 	"qingyu-wf/api/classify"
 	"qingyu-wf/api/friendRelationship"
 	"qingyu-wf/api/user"
@@ -32,6 +33,7 @@ var migrateList = []interface{}{
 	&friendRelationship.FriendRelationship{},
 	&friendRelationship.AwaitingAgreeTable{},
 	&classify.TableClassify{},
+	&chat.ContentChatTable{},
 }
 
 func Init(config Config) {

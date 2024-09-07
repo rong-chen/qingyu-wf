@@ -2,11 +2,10 @@ package Websocket
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"net/http"
+	"qingyu-wf/api/chat"
 	"strings"
 	"sync"
 )
@@ -27,14 +26,10 @@ func HandleWebSocket(c *gin.Context) {
 		return
 	}
 	userId := c.Param("id")
-	uid, err := uuid.Parse(userId)
-	if err != nil {
-		conn.Close()
-		return
-	}
-	connections.Store(uid, conn)
+
+	connections.Store(userId, conn)
 	go Receiver()
-	go sender()
+	//go sender()
 	go func() {
 		for {
 			messageType, msg, err := conn.ReadMessage()
@@ -44,16 +39,17 @@ func HandleWebSocket(c *gin.Context) {
 			switch messageType {
 			case websocket.TextMessage:
 				params := handleMessage(msg)
-
 				if params.Type == "" {
 					conn.WriteMessage(messageType, []byte("数据异常"))
 					break
 				}
 				messageChannel <- params
 			}
-
 		}
-		defer conn.Close()
+		defer func() {
+			connections.Delete(userId)
+			conn.Close()
+		}()
 	}()
 }
 
@@ -61,7 +57,26 @@ func Receiver() {
 	//	接收事件
 	for {
 		msg := <-messageChannel
-		fmt.Println(msg)
+		switch msg.Type {
+		case "text":
+			var table chat.ContentChatTable
+			table.Receiver = msg.Receiver
+			table.Sender = msg.Sender
+			table.Content = msg.Message
+			table.ContentType = msg.Type
+			err := chat.Create(table)
+			if err != nil {
+				return
+			}
+			conn, ok := GetSyncMapConn(table.Receiver)
+			if ok {
+				data, err := json.Marshal(msg)
+				if err != nil {
+					return
+				}
+				conn.WriteMessage(websocket.TextMessage, []byte(data))
+			}
+		}
 	}
 }
 func sender() {
@@ -69,7 +84,7 @@ func sender() {
 }
 
 // GetSyncMapConn 取出conn
-func GetSyncMapConn(id uuid.UUID) (*websocket.Conn, bool) {
+func GetSyncMapConn(id string) (*websocket.Conn, bool) {
 	conn, ok := connections.Load(id)
 	if !ok {
 		return nil, ok
