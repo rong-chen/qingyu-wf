@@ -6,21 +6,27 @@ import (
 	"qinyu-wf/global"
 )
 
+// FriendRelationship 用户关系表
 type FriendRelationship struct {
 	global.Model
-	UserId     uuid.UUID `json:"userId" gorm:"userId"`
-	UserInfo   user.User `json:"userInfo"  gorm:"foreignKey:UserId;references:ID"`
-	FriendId   uuid.UUID `json:"friendId" gorm:"friendId"`
-	FriendInfo user.User `json:"friendInfo"  gorm:"foreignKey:FriendId;references:ID"`
-	Status     string    `json:"status" gorm:"status"` // 1好友，2申请中
+	UserId   uuid.UUID `json:"userId" gorm:"column:user_id"`
+	FriendId uuid.UUID `json:"friendId" gorm:"column:friend_id"`
+	Status   string    `json:"status" gorm:"column:status"` // 1好友，2情侣，3黑名单
+}
+
+// AwaitingAgreeTable 待通过申请好友表
+type AwaitingAgreeTable struct {
+	global.Model
+	UserId   uuid.UUID `json:"userId" gorm:"userId"`
+	FriendId uuid.UUID `json:"friendId" gorm:"friendId"`
+	Status   string    `json:"status" gorm:"column:status"` // 1同意，2等待，3拒绝
 }
 
 type RelationshipList struct {
 	Id         uuid.UUID `json:"id"`
 	UserId     uuid.UUID `json:"userId"`
 	FriendId   uuid.UUID `json:"friendId"`
-	FriendInfo user.User `json:"friendInfo" `
-	Status     string    `json:"status" ` // 1好友，2申请中
+	FriendInfo user.User `json:"friendInfo"`
 }
 
 type CreateParams struct {
@@ -30,4 +36,7 @@ type CreateParams struct {
 
 func (FriendRelationship) TableName() string {
 	return "friend_relationship"
+}
+func (AwaitingAgreeTable) TableName() string {
+	return "awaiting_agree_relationship"
 }

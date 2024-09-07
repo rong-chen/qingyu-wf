@@ -29,6 +29,7 @@ type MigrateInterface interface {
 var migrateList = []interface{}{
 	&user.User{},
 	&friendRelationship.FriendRelationship{},
+	&friendRelationship.AwaitingAgreeTable{},
 }
 
 func Init(config Config) {

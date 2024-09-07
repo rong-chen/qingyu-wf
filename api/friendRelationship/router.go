@@ -12,6 +12,7 @@ func (f RelationshipRouter) InitRouter(router *gin.Engine) {
 	{
 		r.POST("apply", utils.JWTAuthMiddleware, Apply)
 		r.GET("/loadingApply", utils.JWTAuthMiddleware, ApplyList)
-		r.POST("/agree", utils.JWTAuthMiddleware, AgreeFriend)
+		r.GET("/agree/:id", utils.JWTAuthMiddleware, AgreeFriend)
+		r.GET("/list", utils.JWTAuthMiddleware, FriendList)
 	}
 }

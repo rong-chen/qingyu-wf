@@ -13,58 +13,65 @@ func Apply(c *gin.Context) {
 		c.JSON(200, global.RespMsg(0, "参数错误"))
 		return
 	}
-	var fr FriendRelationship
-	fr.ID, _ = uuid.NewUUID()
-	fr.Status = "2"
-	fr.FriendId = cp.FriendId
-	fr.UserId = cp.UserId
+	obj := FindAwaitingAgreeTable(cp.UserId, cp.FriendId)
+	if obj.ID != uuid.Nil {
+		c.JSON(200, global.RespMsg(7, "申请已存在"))
+		return
+	}
+	var aat AwaitingAgreeTable
+	aat.ID, _ = uuid.NewUUID()
+	aat.FriendId = cp.FriendId
+	aat.UserId = cp.UserId
+	aat.Status = "2"
 	userId, _ := c.Get("id")
 	strUserId := userId.(string)
-	if fr.UserId != uuid.MustParse(strUserId) {
+	if aat.UserId != uuid.MustParse(strUserId) {
 		c.JSON(200, global.RespMsg(7, "参数异常"))
 		return
 	}
-	err = ApplyFriend(fr)
+	err = ApplyFriend(aat)
 	if err != nil {
 		c.JSON(200, global.RespMsg(7, "网络异常"))
 		return
 	}
 	c.JSON(200, global.RespMsg(0, "添加成功"))
 }
+
 func ApplyList(c *gin.Context) {
 	userId, _ := c.Get("id")
 	list := FindApplyList(userId)
 	c.JSON(200, global.RespMsgData(0, "", list))
 }
+
 func AgreeFriend(c *gin.Context) {
-	type Agree struct {
-		UserId   string `json:"userId" binding:"required"`
-		Status   string `json:"status" binding:"required"`
-		FriendId string `json:"friendId" binding:"required"`
-		Id       string `json:"id" binding:"required"`
-	}
-	var a Agree
-	err := c.BindJSON(&a)
-	if err != nil {
+	strId := c.Param("id")
+	if strId == "" {
 		c.JSON(200, global.RespMsg(7, "参数错误"))
 		return
 	}
-	err = UpdateFriendRelationshipStatus(a.Id, a.FriendId, a.UserId, a.Status)
+	err := UpdateAwaitAgreeTableStatus(strId, "1")
 	if err != nil {
 		c.JSON(200, global.RespMsg(7, "网络异常"))
 		return
 	}
-	if a.Status == "1" {
-		var fr FriendRelationship
-		fr.ID, _ = uuid.NewUUID()
-		fr.Status = a.Status
-		fr.UserId = uuid.MustParse(a.UserId)
-		fr.FriendId = uuid.MustParse(a.FriendId)
-		err := ApplyFriend(fr)
-		if err != nil {
-			return
-		}
+	table := FindAwaitAgreeTable(strId)
+	var fr FriendRelationship
+	fr.Status = "1"
+	fr.ID, _ = uuid.NewUUID()
+	fr.UserId = table.UserId
+	fr.FriendId = table.FriendId
+	err = CreateRelationshipList(fr)
+	fr.ID, _ = uuid.NewUUID()
+	fr.UserId = table.FriendId
+	fr.FriendId = table.UserId
+	err = CreateRelationshipList(fr)
+	if err != nil {
+		c.JSON(200, global.RespMsg(7, "网络异常"))
+		return
 	}
 	c.JSON(200, global.RespMsg(0, "添加成功"))
+}
+
+func FriendList(c *gin.Context) {
 
 }
