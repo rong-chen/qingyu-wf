@@ -1,6 +1,6 @@
 package user
 
-import "qinyu-wf/global"
+import "qingyu-wf/global"
 
 type User struct {
 	Username string `json:"username" gorm:"username"`

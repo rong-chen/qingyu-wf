@@ -3,7 +3,7 @@ package friendRelationship
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"qinyu-wf/global"
+	"qingyu-wf/global"
 )
 
 func Apply(c *gin.Context) {

@@ -3,8 +3,8 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"qinyu-wf/global"
-	"qinyu-wf/utils"
+	"qingyu-wf/global"
+	"qingyu-wf/utils"
 )
 
 func CreateApi(c *gin.Context) {

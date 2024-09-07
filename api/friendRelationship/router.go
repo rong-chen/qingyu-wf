@@ -2,7 +2,7 @@ package friendRelationship
 
 import (
 	"github.com/gin-gonic/gin"
-	"qinyu-wf/utils"
+	"qingyu-wf/utils"
 )
 
 type RelationshipRouter struct{}

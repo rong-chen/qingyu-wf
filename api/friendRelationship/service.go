@@ -3,8 +3,8 @@ package friendRelationship
 import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"qinyu-wf/api/user"
-	"qinyu-wf/global"
+	"qingyu-wf/api/user"
+	"qingyu-wf/global"
 )
 
 // ApplyFriend 添加等待同意表格数据

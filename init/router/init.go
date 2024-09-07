@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"qinyu-wf/api/friendRelationship"
-	"qinyu-wf/api/user"
+	"qingyu-wf/api/friendRelationship"
+	"qingyu-wf/api/user"
 )
 
 // routerInterface 定义接口，要求实现 InitRouter 方法

@@ -2,8 +2,8 @@ package friendRelationship
 
 import (
 	"github.com/google/uuid"
-	"qinyu-wf/api/user"
-	"qinyu-wf/global"
+	"qingyu-wf/api/user"
+	"qingyu-wf/global"
 )
 
 // FriendRelationship 用户关系表

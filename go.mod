@@ -1,4 +1,4 @@
-module qinyu-wf
+module qingyu-wf
 
 go 1.23.0
 

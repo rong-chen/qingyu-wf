@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"os"
-	"qinyu-wf/init/db"
+	"qingyu-wf/init/db"
 )
 
 func Init() (db db.Config) {

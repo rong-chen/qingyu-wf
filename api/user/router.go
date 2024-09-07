@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	"qinyu-wf/utils"
+	"qingyu-wf/utils"
 )
 
 type Router struct {

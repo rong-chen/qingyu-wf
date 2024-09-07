@@ -1,9 +1,9 @@
 package main
 
 import (
-	"qinyu-wf/init/db"
-	"qinyu-wf/init/router"
-	"qinyu-wf/init/viper"
+	"qingyu-wf/init/db"
+	"qingyu-wf/init/router"
+	"qingyu-wf/init/viper"
 )
 
 func main() {

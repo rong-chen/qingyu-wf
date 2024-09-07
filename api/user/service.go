@@ -1,7 +1,7 @@
 package user
 
 import (
-	"qinyu-wf/global"
+	"qingyu-wf/global"
 )
 
 func Create(user User) error {

@@ -5,9 +5,9 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"qinyu-wf/api/friendRelationship"
-	"qinyu-wf/api/user"
-	"qinyu-wf/global"
+	"qingyu-wf/api/friendRelationship"
+	"qingyu-wf/api/user"
+	"qingyu-wf/global"
 )
 
 type Config struct {
