@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"qingyu-wf/global"
 	"qingyu-wf/utils"
+	"time"
 )
 
 func CreateApi(c *gin.Context) {
@@ -50,6 +51,7 @@ func Login(c *gin.Context) {
 	}
 	strUsr := user.ID.String()
 	jwt, err := utils.GenerateJWT(strUsr)
+	global.Redis.Set(c, strUsr, jwt, 24*time.Hour)
 	if err != nil {
 		return
 	}

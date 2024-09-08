@@ -4,3 +4,7 @@ MySql:
   database: qinyu
   User: admin
   Pwd: 130561Cr@
+Redis:
+  Host: 47.120.34.163
+  Pwd: 130561Cr@
+  Port: 6379

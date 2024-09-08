@@ -62,6 +62,14 @@ func JWTAuthMiddleware(c *gin.Context) {
 	if err != nil {
 		return
 	}
+	result, err := global.Redis.Get(c, claims.UserID).Result()
+	if err != nil {
+		return
+	}
+	if result != token {
+		c.JSON(200, global.RespMsg(1, "该账号已在其他地方登录"))
+		return
+	}
 	c.Set("id", claims.UserID)
 	c.Next()
 }

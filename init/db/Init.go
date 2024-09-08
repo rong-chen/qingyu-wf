@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,6 +15,7 @@ import (
 
 type Config struct {
 	MySqlConfig MySqlConfig `mapstructure:"MySql"`
+	RedisConfig RedisConfig `mapstructure:"Redis"`
 }
 
 type MySqlConfig struct {
@@ -24,6 +26,11 @@ type MySqlConfig struct {
 	Port     string `mapstructure:"Port"`
 }
 
+type RedisConfig struct {
+	Host string `mapstructure:"Host"`
+	Port string `mapstructure:"Port"`
+	Pwd  string `mapstructure:"Pwd"`
+}
 type MigrateInterface interface {
 	AutoMigrateFunc()
 }
@@ -47,6 +54,15 @@ func Init(config Config) {
 		panic(err)
 	}
 	global.MySql = db
+
+	//
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     config.RedisConfig.Host + ":" + config.RedisConfig.Port,
+		Password: config.RedisConfig.Pwd, // no password set
+		DB:       0,                      // use default DB
+	})
+	global.Redis = rdb
 }
 
 func InitAutoMigrate() {

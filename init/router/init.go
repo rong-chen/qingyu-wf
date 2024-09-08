@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/unrolled/secure"
 	"qingyu-wf/api/Websocket"
+	"qingyu-wf/api/chat"
 	"qingyu-wf/api/classify"
 	"qingyu-wf/api/friendRelationship"
 	"qingyu-wf/api/user"
@@ -20,6 +21,7 @@ var routerList = []routerInterface{
 	new(friendRelationship.RelationshipRouter),
 	new(classify.RouterClassify),
 	new(Websocket.RouterWebsocket),
+	new(chat.RouterChat),
 }
 
 func Init() {

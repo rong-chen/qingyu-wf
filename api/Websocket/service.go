@@ -28,8 +28,7 @@ func HandleWebSocket(c *gin.Context) {
 	userId := c.Param("id")
 
 	connections.Store(userId, conn)
-	go Receiver()
-	//go sender()
+	go Sender()
 	go func() {
 		for {
 			messageType, msg, err := conn.ReadMessage()
@@ -53,7 +52,7 @@ func HandleWebSocket(c *gin.Context) {
 	}()
 }
 
-func Receiver() {
+func Sender() {
 	//	接收事件
 	for {
 		msg := <-messageChannel
@@ -78,9 +77,6 @@ func Receiver() {
 			}
 		}
 	}
-}
-func sender() {
-	//	发送事件
 }
 
 // GetSyncMapConn 取出conn
