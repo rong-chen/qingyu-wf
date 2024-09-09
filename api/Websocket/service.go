@@ -75,6 +75,15 @@ func Sender() {
 				}
 				conn.WriteMessage(websocket.TextMessage, []byte(data))
 			}
+		case "video":
+			conn, ok := GetSyncMapConn(msg.Receiver)
+			if ok {
+				data, err := json.Marshal(msg)
+				if err != nil {
+					return
+				}
+				conn.WriteMessage(websocket.TextMessage, []byte(data))
+			}
 		}
 	}
 }
