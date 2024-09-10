@@ -24,7 +24,7 @@ func GenerateJWT(userId string) (string, error) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Issuer:    "qinyu",
+			Issuer:    "qingyu",
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -71,5 +71,9 @@ func JWTAuthMiddleware(c *gin.Context) {
 		return
 	}
 	c.Set("id", claims.UserID)
+	if claims.UserID == "" {
+		c.JSON(200, global.RespMsg(7, "Authorization异常"))
+		return
+	}
 	c.Next()
 }

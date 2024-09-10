@@ -60,6 +60,10 @@ func Login(c *gin.Context) {
 
 func GetUserInfo(c *gin.Context) {
 	id, _ := c.Get("id")
+	if id == nil {
+		c.JSON(200, global.RespMsg(7, "参数异常"))
+		return
+	}
 	user := SearchDb("id", id.(string))
 	c.JSON(200, global.RespMsgData(0, "", user))
 }
@@ -68,6 +72,7 @@ func GetUserInfoById(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
 		c.JSON(200, global.RespMsg(7, "参数不正确"))
+		return
 	}
 	user := SearchDb("id", id)
 	c.JSON(200, global.RespMsgData(0, "", user))

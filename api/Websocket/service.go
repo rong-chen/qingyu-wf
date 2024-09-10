@@ -2,6 +2,7 @@ package Websocket
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -19,6 +20,7 @@ var (
 	}
 	messageChannel = make(chan MessageParams)
 )
+var mu sync.Mutex
 
 func HandleWebSocket(c *gin.Context) {
 	conn, err := upgrade.Upgrade(c.Writer, c.Request, nil)
@@ -73,7 +75,9 @@ func Sender() {
 				if err != nil {
 					return
 				}
+				mu.Lock()
 				conn.WriteMessage(websocket.TextMessage, []byte(data))
+				mu.Unlock()
 			}
 		case "video":
 			conn, ok := GetSyncMapConn(msg.Receiver)
@@ -82,7 +86,20 @@ func Sender() {
 				if err != nil {
 					return
 				}
+				mu.Lock()
 				conn.WriteMessage(websocket.TextMessage, []byte(data))
+				mu.Unlock()
+			}
+		case "audio_conn":
+			conn, ok := GetSyncMapConn(msg.Receiver)
+			if ok {
+				data, err := json.Marshal(msg)
+				if err != nil {
+					return
+				}
+				mu.Lock()
+				conn.WriteMessage(websocket.TextMessage, []byte(data))
+				mu.Unlock()
 			}
 		}
 	}
@@ -118,6 +135,7 @@ func handleMessage(msg []byte) (message MessageParams) {
 	}
 
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	return
