@@ -9,6 +9,7 @@ import (
 	"qingyu-wf/api/chat"
 	"strings"
 	"sync"
+	"time"
 )
 
 var (
@@ -28,8 +29,12 @@ func HandleWebSocket(c *gin.Context) {
 		return
 	}
 	userId := c.Param("id")
-
 	connections.Store(userId, conn)
+	err = conn.SetReadDeadline(time.Now().Add(24 * time.Hour))
+	err = conn.SetWriteDeadline(time.Now().Add(24 * time.Hour))
+	if err != nil {
+		return
+	}
 	go Sender()
 	go func() {
 		for {
@@ -79,7 +84,7 @@ func Sender() {
 				conn.WriteMessage(websocket.TextMessage, []byte(data))
 				mu.Unlock()
 			}
-		case "video":
+		case "audio":
 			conn, ok := GetSyncMapConn(msg.Receiver)
 			if ok {
 				data, err := json.Marshal(msg)
