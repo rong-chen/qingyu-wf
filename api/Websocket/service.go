@@ -97,15 +97,33 @@ func Sender() {
 			}
 		case "audio_conn":
 			conn, ok := GetSyncMapConn(msg.Receiver)
+			data, err := json.Marshal(msg)
+			if err != nil {
+				return
+			}
 			if ok {
-				data, err := json.Marshal(msg)
-				if err != nil {
-					return
-				}
 				mu.Lock()
 				conn.WriteMessage(websocket.TextMessage, []byte(data))
 				mu.Unlock()
+			} else {
+				conn2, ok2 := GetSyncMapConn(msg.Sender)
+				var receiveData MessageParams
+				receiveData.Sender = "系统通知"
+				receiveData.Receiver = msg.Sender
+				receiveData.Message = "该用户不在线"
+				receiveData.Type = "broadcast"
+				receiveData.Description = "系统通知"
+				marshal, err := json.Marshal(receiveData)
+				if err != nil {
+					return
+				}
+				if ok2 {
+					mu.Lock()
+					conn2.WriteMessage(websocket.TextMessage, marshal)
+					mu.Unlock()
+				}
 			}
+
 		}
 	}
 }
